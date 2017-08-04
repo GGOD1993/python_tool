@@ -1,5 +1,34 @@
 #-*- coding: UTF-8 -*-
 from PIL import Image
+import os
+import re
+import sys
+import glob
+import os
+from Tkinter import *
+import Tkinter
+import tkFileDialog
+import tkMessageBox
+
+filetype2='.png'
+
+def open_allfile(path,filetype):
+    data=[]
+    read_files=glob.glob(path+'*'+filetype)
+    print read_files
+    for i in read_files:
+        with open(i,'rb') as infile:
+            data.append(infile.read())
+    return data
+
+def get_filename(path,filetype):
+    import os
+    name=[]
+    for root,dirs,files in os.walk(path):
+        for i in files:
+            if filetype in i:
+                name.append(i.replace(filetype,''))
+    return name
 
 def output_result():
     base_img_width = 1024
@@ -40,4 +69,21 @@ def output_result():
     base_img.save('/Users/ggod/Desktop/pic/26/fontname_0.png')
     fp.close()
 
-output_result()
+#output_result()
+
+#UI_Ctrl
+def get_directory():
+    dirname = tkFileDialog.askdirectory(parent=root, initialdir="/Users/ggod/Desktop/pic", title='Pick a directory')
+    data1 = open_allfile(dirname, filetype2)
+    print len(data1)
+    name2 = get_filename(dirname, filetype2)
+    print name2
+    print dirname
+
+#UI
+root = Tk()
+root.title("word calculate gui")
+root.geometry("1024x768")
+root.resizable(width=False, height=False)
+Button(root,text="ChooseDirectory",command=get_directory,height=4,width=16).grid(row = 1, column = 2, columnspan = 2, sticky=N)
+root.mainloop()
